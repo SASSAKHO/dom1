@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panier d'Achat</title>
+    <style>
+        /* Styles de base pour le panier */
+        .cart-item { display: flex; align-items: center; margin-bottom: 10px; }
+        .item-image { width: 50px; height: 50px; margin-right: 10px; }
+        .item-info { flex: 1; }
+        .quantity-controls { margin-right: 10px; }
+        .like-button { cursor: pointer; }
+        .liked { color: red; }
+    </style>
+</head>
+<body>
+    <div id="cart">
+        <div class="cart-item" data-item-id="1">
+            <img class="item-image" src="vetement enfant 3.jpg" alt="Article 1">
+            <div class="item-info">
+                <div>Article 1</div>
+                <div>Prix Unitaire: 10€</div>
+                <div class="quantity-controls">
+                    <button class="decrease">-</button>
+                    <span class="quantity">1</span>
+                    <button class="increase">+</button>
+                </div>
+                <div>Total Article: <span class="item-total">10€</span></div>
+            </div>
+            <button class="remove">Supprimer</button>
+            <span class="like-button">❤️</span>
+        </div>
+        <!-- Ajoutez plus d'articles ici -->
+        <div>
+            <div>Sous-Total: <span id="subtotal">10€</span></div>
+            <div>Frais de Livraison: <span id="shipping">5€</span></div>
+            <div>Total Général: <span id="total">15€</span></div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.increase').forEach(button => {
+            button.addEventListener('click', () => {
+                const item = button.closest('.cart-item');
+                const quantityElem = item.querySelector('.quantity');
+                const totalElem = item.querySelector('.item-total');
+                let quantity = parseInt(quantityElem.textContent);
+                quantity++;
+                quantityElem.textContent = quantity;
+                const price = 10; // Prix unitaire fixe pour l'exemple
+                totalElem.textContent = (quantity * price) + '€';
+                updateCartTotal();
+            });
+        });
+
+        document.querySelectorAll('.decrease').forEach(button => {
+            button.addEventListener('click', () => {
+                const item = button.closest('.cart-item');
+                const quantityElem = item.querySelector('.quantity');
+                const totalElem = item.querySelector('.item-total');
+                let quantity = parseInt(quantityElem.textContent);
+                if (quantity > 1) {
+                    quantity--;
+                    quantityElem.textContent = quantity;
+                    const price = 10; // Prix unitaire fixe pour l'exemple
+                    totalElem.textContent = (quantity * price) + '€';
+                    updateCartTotal();
+                }
+            });
+        });
+
+        document.querySelectorAll('.remove').forEach(button => {
+            button.addEventListener('click', () => {
+                const item = button.closest('.cart-item');
+                item.remove();
+                updateCartTotal();
+            });
+        });
+
+        document.querySelectorAll('.like-button').forEach(button => {
+            button.addEventListener('click', () => {
+                button.classList.toggle('liked');
+            });
+        });
+
+        function updateCartTotal() {
+            let subtotal = 0;
+            document.querySelectorAll('.item-total').forEach(totalElem => {
+                subtotal += parseFloat(totalElem.textContent.replace('€', ''));
+            });
+            document.getElementById('subtotal').textContent = subtotal + '€';
+            document.getElementById('total').textContent = (subtotal + 5) + '€'; // Exemple avec 5€ de frais de livraison
+        }
+    </script>
+</body>
+</html>
